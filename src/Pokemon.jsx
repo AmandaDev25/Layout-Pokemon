@@ -1,30 +1,47 @@
 import { TextField, Grid, Button, Typography, Chip } from '@mui/material';
-import Checkbox from '@mui/material/Checkbox';
-import FormGroup from '@mui/material/FormGroup';
-import FormLabel from '@mui/material/FormLabel';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import { useFormik } from 'formik';
+import Autocomplete from '@mui/material/Autocomplete';
+import InputAdornment from '@mui/material/InputAdornment';
 
-
-
-//use states
+//Funções
 export default function Pokemon() {
 
-  //variáveis & arrays
+  const categoryList = [
+    {
+      value: '',
+      label: '',
+    },
+    {
+      value: 'Fogo',
+      label: 'Fogo',
+    },
+    {
+      value: 'Água',
+      label: 'Água',
+    },
+    {
+      value: 'Planta',
+      label: 'Planta',
+    },
+  ];
+
+  //Variáveis & Arrays
   const guardarFraqueza = () => {
-    formik.values.resultado.push( formik.values.fraqueza)
-    formik.setFieldValue('fraqueza','')   
+    formik.values.resultado.push(formik.values.fraqueza)
+    formik.setFieldValue('fraqueza', '')
   }
 
   const guardarResistencia = () => {
     formik.values.resultado2.push(formik.values.resistencia)
-    formik.setFieldValue('resistencia','')
+    formik.setFieldValue('resistencia', '')
   }
 
-  //formik
-
+  //Formik
   const formik = useFormik(
     {
       initialValues: {
@@ -35,7 +52,7 @@ export default function Pokemon() {
         tipo1: '',
         tipo2: '',
         sexo: '',
-        peso: '',
+        peso: '85',
         fraqueza: '',
         resistencia: '',
         resultado: [],
@@ -43,6 +60,19 @@ export default function Pokemon() {
       }
     }
   )
+
+  //enums
+  const gender = [
+    { label: 'Feminino' },
+    { label: 'Masculino' },
+    { label: 'Indefinido' }
+  ]
+
+  const typeList = [
+    { label: 'Fogo' },
+    { label: 'Água' },
+    { label: 'Planta'}
+  ]
 
 
   return (
@@ -54,7 +84,7 @@ export default function Pokemon() {
         justifyContent={'center'}
         sx={{ fontFamily: 'fantasy' }}
       >
-        Dados do pokémon
+        Cadastro do pokémon
       </Typography>
 
       <Grid container spacing={2}>
@@ -74,23 +104,72 @@ export default function Pokemon() {
             </Grid>
 
             <Grid item md={3} sm={12} xs={12}>
-              <TextField size='small' label='shiny' fullWidth />
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">Shiny</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel value="sim" control={<Radio />} label="Sim" />
+                  <FormControlLabel value="não" control={<Radio />} label="Não" />
+                </RadioGroup>
+              </FormControl>
             </Grid>
 
             <Grid item md={3} sm={12} xs={12}>
-              <TextField size='small' label='tipo 1' fullWidth />
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                name='tipo1'
+                value={formik.values.tipo1}
+                onChange={formik.handleChange}
+                options={typeList}
+                size='small'
+                renderInput={(params) => <TextField {...params} label="Tipo 1" />}
+              />
             </Grid>
 
             <Grid item md={3} sm={12} xs={12}>
-              <TextField size='small' label='tipo 2' fullWidth />
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                name='tipo2'
+                value={formik.values.tipo2}
+                onChange={formik.handleChange}
+                options={typeList}
+                size='small'
+                renderInput={(params) => <TextField {...params} label="Tipo 2" />}
+              />
             </Grid>
 
             <Grid item md={3} sm={12} xs={12}>
-              <TextField size='small' label='sexo' fullWidth />
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                name='sexo'
+                value={formik.values.sexo}
+                onChange={formik.handleChange}
+                options={gender}
+                size='small'
+                fullWidth
+                renderInput={(params) => <TextField {...params} label="Sexo" />}
+              />
             </Grid>
 
             <Grid item md={3} sm={12} xs={12}>
-              <TextField size='small' label='peso' fullWidth />
+              <TextField
+                label="peso"
+                id="outlined-start-adornment"
+                fullWidth
+                name='peso'
+                value={formik.values.peso}
+                onChange={formik.handleChange}
+                size='small'
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">kg</InputAdornment>,
+                }}
+              />
             </Grid>
 
             <Grid item md={12} sm={12} xs={12}>
@@ -103,7 +182,7 @@ export default function Pokemon() {
 
             <Grid item md={4} sm={12} xs={12}>
               <Button variant='contained' color='inherit' onClick={guardarFraqueza} fullWidth >
-                Clique p/ add
+                Adicionar
               </Button>
             </Grid>
             <Grid item md={12} sm={12} xs={12}>
@@ -116,7 +195,7 @@ export default function Pokemon() {
 
             <Grid item md={4} sm={12} xs={12}>
               <Button variant='contained' color='inherit' onClick={guardarResistencia} fullWidth >
-                Clique p/ add
+                Adicionar
               </Button>
             </Grid>
 
@@ -125,6 +204,10 @@ export default function Pokemon() {
                 Adicionar
               </Button>
             </Grid>
+            {formik.values.peso}
+            
+            {formik.values.sexo}
+
           </Grid>
         </Grid>
       </Grid>
